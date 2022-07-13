@@ -401,3 +401,12 @@ body.login .form-signin input[type="password"] {
   border-top-right-radius: 0;
 }
  
+
+.img-comarca {
+	height: 100px;
+	width: 1200px;
+	background-image: url("/imagenes/frentecomarca.jpg");
+    background-size: cover;
+	background-repeat:no-repeat;
+	background-position: center center;
+  }

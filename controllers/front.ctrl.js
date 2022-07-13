@@ -7,7 +7,14 @@ let nodemailer = require('nodemailer');
 
 // INICIO:GET 
 const inicioGET = function (req, res) {
-    
+
+    console.log("Sesion", req.session)
+    console.log("Sesion Jd", req.session.id)
+
+    req.session.visita = req.session.visita ? req.session.visita + 1 : 1;
+    res.send(`Visita numero: ${req.session.visita}`)
+
+    /*
     let sql = 'SELECT * FROM productos'
     db.query(sql, function(err,data) {
         if (err) res.send(`Ocurrió el siguiente error: ${err}`)
@@ -17,6 +24,8 @@ const inicioGET = function (req, res) {
             productos: data
         })
     })
+    */
+
 
 }
 
@@ -24,45 +33,52 @@ const contactoGET = function (req, res) {
     res.render('contacto')
 }
 
+  
 const contactoPOST = function (req, res) {
     // Definimos el transporter
+    console.log('Entre al email')
     let transporter = nodemailer.createTransport({
-        host: "smtp.mailtrap.io",
-        port: 2525,
+        host: "smtp-mail.outlook.com", // hostname
+        port: 587, // port for secure SMTP
+        secureConnection: false,
+        tls: {
+           ciphers:'SSLv3'
+        },
         auth: {
-            user: "683bb9e3393240",
-            pass: "99a59f1999facb"
+            user:  process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
         }
-    })
-    // Definimos el e-mail
-    console.log("BODY: ", req.body)
+    }    )
+   //definimos el email
+    //esta es la info que recibimos del formulario
     let data = req.body
-    let mailOptions = {
-        from: data.nombre, // de: "Santi"
-        to: "santiago.acosta@bue.edu.ar",
+    let emailOptions = {
+        from: data.nombre, // de: "Pablo"
+        to: process.env.EMAIL_PRIMARIO ,
         subject: data.asunto,
         html: `<p> ${data.mensaje}</p>`
-    }
+        }
     // enviar email
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
+    transporter.sendMail(emailOptions, function(error, info){
+        if (error){
             console.log(error)
             res.status(500, error.message)
             res.status(500).render('contacto', {
-                mensaje: `Ha ocurrido el siguiente error ${error.message}`,
                 mostrar: true,
+                mensaje: `Ha ocurrido el siguiente error ${error.message}`,
                 clase: 'danger'
             })
-        } else {
-            console.log('E-mail enviado')
+        }else {
+            console.log('Email enviado')
             res.status(200).render('contacto', {
-                mensaje: "Mail enviado correctamente",
                 mostrar: true,
-                clase: 'success'
+                clase: 'sucess',
+                mensaje: `Email enviado exitosamente`
             })
         }
     })
 }
+
 
 const comoComprarGET = function (req, res) {
     res.render('como-comprar')
