@@ -1,3 +1,4 @@
+
 const axios = require('axios');
 const hbs = require('hbs');
 
@@ -25,5 +26,19 @@ hbs.registerHelper('dolarApeso', function(dato) {
     
     let precioFinal = (dolarTurista * dato);
     return new Intl.NumberFormat('es-AR',{style: 'currency', currency: 'ARS'}).format(precioFinal)
+
+})
+
+// helper de listado de caracteristicas
+hbs.registerHelper('listado', function(objeto){
+    // Convierto en array la lista de caracteristicas que recibimos por coma (i3,128gb)
+    console.log("Listado Objeto", objeto)
+    let array = objeto.split(',') // [i3, 128gb..]
+    let html = "<ul>"
+    for (let item of array){
+        html = `${html} <li> ${item} </li>`
+    }
+
+    return html + '</ul>'
 
 })

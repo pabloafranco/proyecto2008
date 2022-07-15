@@ -8,29 +8,37 @@ let nodemailer = require('nodemailer');
 // INICIO:GET 
 const inicioGET = function (req, res) {
 
+        /*
     console.log("Sesion", req.session)
     console.log("Sesion Jd", req.session.id)
 
     req.session.visita = req.session.visita ? req.session.visita + 1 : 1;
     res.send(`Visita numero: ${req.session.visita}`)
-
-    /*
+    */
+  
     let sql = 'SELECT * FROM productos'
     db.query(sql, function(err,data) {
         if (err) res.send(`Ocurrió el siguiente error: ${err}`)
-        console.log(data)
+        // console.log(data)
         res.render('index', {
+            logeado: req.session.logeado,
+            usuario: req.session.nombreUsuario,
             titulo: "Mi emprendimiento",
             productos: data
         })
     })
-    */
+    
 
 
 }
 
 const contactoGET = function (req, res) {
-    res.render('contacto')
+    res.render('contacto', {
+        titulo: "Contacto",
+        logeado: req.session.logeado,
+        usuario: req.session.nombreUsuario
+    }
+    )
 }
 
   
@@ -81,7 +89,11 @@ const contactoPOST = function (req, res) {
 
 
 const comoComprarGET = function (req, res) {
-    res.render('como-comprar')
+    res.render('como-comprar', {
+        titulo: "Como Comprar",
+        logeado: req.session.logeado,
+        usuario: req.session.nombreUsuario
+    })
 }
 
 const detalleProductoGET_ID = function (req, res) {
@@ -98,7 +110,10 @@ const detalleProductoGET_ID = function (req, res) {
             })
         } else {
             res.render('detalle-producto', {
-                producto: data[0]
+                producto: data[0],
+                titulo: `Producto: ${data[0].nombre}`,
+                logeado: req.session.logeado,
+                usuario: req.session.nombreUsuario
             })
         }
     })
@@ -108,7 +123,11 @@ const detalleProductoGET_ID = function (req, res) {
 }
 
 const sobreNosotrosGET = function (req, res) {
-    res.render('sobre-nosotros')
+    res.render('sobre-nosotros', {
+        titulo: "Sobre Nosotros",
+        logeado: req.session.logeado,
+        usuario: req.session.nombreUsuario
+    })
 }
 
 module.exports = {
