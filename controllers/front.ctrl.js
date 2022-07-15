@@ -60,11 +60,12 @@ const contactoPOST = function (req, res) {
    //definimos el email
     //esta es la info que recibimos del formulario
     let data = req.body
+    //console.log(data)
     let emailOptions = {
-        from: data.nombre, // de: "Pablo"
+        from: process.env.EMAIL_USER, // del email qu emanda: "Pablo"
         to: process.env.EMAIL_PRIMARIO ,
         subject: data.asunto,
-        html: `<p> ${data.mensaje}</p>`
+        html: `<p>${data.nombre}</p><br>${data.email}<br><p> ${data.mensaje}</p>`
         }
     // enviar email
     transporter.sendMail(emailOptions, function(error, info){
